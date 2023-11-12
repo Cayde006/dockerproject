@@ -5,7 +5,7 @@ EXPOSE 80
 
 #install des packet requis
 RUN apk update \
-&& apk add --no-cache apache2 php git
+&& apk add --no-cache apache2 php81-apache2 git
 
 #récupération de dvwa
 
@@ -15,6 +15,6 @@ RUN mkdir -p /var/www/localhost/htdocs \
 
 #copy des fichier de conf.
 COPY dvwa.conf /etc/apache2/conf.d/dvwa.conf
-COPY config.inc.php.dist config/config.inc.php
+COPY config.inc.php.dist /var/www/localhost/htdocs/DVWA/config/config.inc.php
 
 CMD ["httpd", "-D", "FOREGROUND"]
