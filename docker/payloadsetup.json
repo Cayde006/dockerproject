@@ -1,0 +1,10 @@
+{
+    
+    "data": {
+      "MYSQL_ROOT_PASSWORD":"N3twork!",
+      "MYSQL_DATABASE":"dvwa",
+      "MYSQL_USER":"dvwa",
+      "MYSQL_PASSWORD":"network"
+   
+  }
+}  
