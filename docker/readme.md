@@ -1,1 +1,6 @@
-Bonjour je vous dépose se fichier mais j'ai une erreur de dvwa qui ne fonctionne pas et je ne comprends pas pourquoi?
+Step 1 install DOCKER on your system
+in sudo: 
+Step 2 use build.sh to build docker image
+Step 3 use start.sh to run containers
+
+if you want to remove use stop.sh folowed by remouve.sh
