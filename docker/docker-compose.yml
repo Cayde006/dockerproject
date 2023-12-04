@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  orsoniwebapp:
+    image: orsoniwebapp:0.0.1
+    container_name: orsoniwebapp
+    volumes:
+      - /tmp/web
+    networks:
+      - bddnetwork
+    ports:
+      - "1234:80"
+    restart: always
+
+  orsonidatabase:
+    image: orsonidatabase:0.0.1
+    container_name: orsonidatabase
+    volumes:
+      - /tmp/database
+    networks:
+      - bddnetwork
+    restart: always
+
+networks:
+  bddnetwork:
+    driver: bridge
