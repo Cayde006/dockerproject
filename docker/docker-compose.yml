@@ -1,16 +1,20 @@
 version: '3'
-
+#description des service web et base de donnée  
 services:
   orsoniwebapp:
     image: orsoniwebapp:0.0.1
     container_name: orsoniwebapp
+    #def du volume
     volumes:
       - /tmp/web
+      #attachement au réseaux
     networks:
       - bddnetwork
+     #def du lien entre les ports 
     ports:
       - "1234:80"
-    restart: always
+    #redémarage auto
+    restart: always 
 
   orsonidatabase:
     image: orsonidatabase:0.0.1
@@ -21,6 +25,7 @@ services:
       - bddnetwork
     restart: always
 
+#le réseau virtuel 
 networks:
   bddnetwork:
     driver: bridge
