@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    restart: always
+    networks:
+      - gitea-net
+    volumes:
+      - ./gitea:/data
+    ports:
+      - "3000:3000"
+      - "222:22"
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=mysql
+      - DB_HOST=db:3306
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
+    depends_on:
+      - db
+
+  drone-server:
+    image: drone/drone:latest
+    container_name: drone-server
+    restart: always
+    networks:
+      - gitea-net
+    ports:
+      - "8080:80"
+      - "443:443"
+    volumes:
+      - /var/lib/drone:/data
+    environment:
+      - DRONE_GITEA_SERVER=http://gitea:3000
+      - DRONE_GITEA_CLIENT_ID=network
+      - DRONE_GITEA_CLIENT_SECRET=network
+      - DRONE_RPC_SECRET=network
+      - DRONE_SERVER_HOST=network
+      - DRONE_SERVER_PROTO=http
+      - DRONE_USER_CREATE=username:network,admin:true
+    depends_on:
+      - gitea
+
+  drone-agent:
+    image: drone/agent:latest
+    container_name: drone-agent
+    restart: always
+    networks:
+      - gitea-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_RPC_SERVER=http://drone-server
+      - DRONE_RPC_SECRET=network
+      - DRONE_RUNNER_CAPACITY=2
+    depends_on:
+      - drone-server
+
+  db:
+    image: mariadb:latest
+    container_name: gitea-db
+    restart: always
+    networks:
+      - gitea-net
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root-pass
+      - MYSQL_DATABASE=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea
+
+networks:
+  gitea-net:
+    driver: bridge
